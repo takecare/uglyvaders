@@ -1,7 +1,10 @@
-player = {x=0,y=0,bullets={}}
+player = {x=0,y=400,bullets={}}
 
 function love.load()
-    -- ...
+    player.fire = function()
+        bullet = {x=player.x,player.y}
+        table.insert(player.bullets, bullet)
+    end
 end
 
 function love.update(dt)
