@@ -1,15 +1,14 @@
 DEBUG = true
 
-player = {x=0,y=400,w=100,h=20,bw=10,bh=10,bt=os.time(),bullets={}}
+player = {  x=0,y=580,w=100,h=20,s=8,
+            bw=10,bh=10,bs=3,cooldown=15,
+            bullets={} }
 
 function love.load()
     player.fire = function()
-        currentTime = os.time()
-        diffTime = currentTime - player.bt
-        d("curr=" .. currentTime .. " diff=" .. diffTime)
-        if diffTime >= 1 then
+        if player.cooldown < 0 then
             d("fire!")
-            player.bt = currentTime
+            player.cooldown = 15
             bullet = {x=player.x+player.w/2,y=player.y-player.h/2}
             table.insert(player.bullets, bullet)
         else
@@ -19,10 +18,12 @@ function love.load()
 end
 
 function love.update(dt)
+    player.cooldown = player.cooldown - 1
+
     if love.keyboard.isDown("right") then
-        player.x = player.x + 1
+        player.x = player.x + player.s
     elseif love.keyboard.isDown("left") then
-        player.x = player.x - 1
+        player.x = player.x - player.s
     end
 
     if love.keyboard.isDown("space") then
@@ -33,7 +34,7 @@ function love.update(dt)
         if b.y < -player.bh then
             table.remove(player.bullets, i)
         else
-            b.y = b.y - 2
+            b.y = b.y - player.bs
         end
     end
 end
