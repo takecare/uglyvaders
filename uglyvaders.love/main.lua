@@ -9,10 +9,10 @@ enemy = {   x=0,y=0,w=50,h=50,s=4,
             bullets={} }
 
 function enemy:fire()
-    if enemy.cooldown < 0 then
-        enemy.cooldown = 30
-        local bullet = {x=enemy.x+enemy.x/2,y=enemy.y+enemy.h/2}
-        table.insert(enemy.bullets, bullet)
+    if self.cooldown < 0 then
+        self.cooldown = 30
+        local bullet = {x=self.x+self.x/2,y=self.y+self.h/2}
+        table.insert(self.bullets, bullet)
     end
 end
 
