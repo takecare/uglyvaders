@@ -4,15 +4,24 @@ player = {  x=0,y=580,w=100,h=20,s=8,
             bw=10,bh=10,bs=3,cooldown=15,
             bullets={} }
 
+enemy = {   x=0,y=0,w=50,h=50,s=4,
+            bw=10,bh=10,bs=2,cooldown=30,
+            bullets={} }
+
+function enemy:fire()
+    if enemy.cooldown < 0 then
+        enemy.cooldown = 30
+        local bullet = {x=enemy.x+enemy.x/2,y=enemy.y+enemy.h/2}
+        table.insert(enemy.bullets, bullet)
+    end
+end
+
 function love.load()
     player.fire = function()
         if player.cooldown < 0 then
-            d("fire!")
             player.cooldown = 15
-            bullet = {x=player.x+player.w/2,y=player.y-player.h/2}
+            local bullet = {x=player.x+player.w/2,y=player.y-player.h/2}
             table.insert(player.bullets, bullet)
-        else
-            d("no fire")
         end
     end
 end
@@ -40,7 +49,6 @@ function love.update(dt)
 end
 
 function love.draw()
-    
     -- draw player
     love.graphics.setColor(200, 200, 200)
     love.graphics.rectangle("fill", player.x, player.y, player.w, player.h)
@@ -48,10 +56,8 @@ function love.draw()
     -- draw bullets
     for _,b in pairs(player.bullets) do
         love.graphics.setColor(255, 255, 255)
-        d("drawing bullet. total bullets = " .. #player.bullets)
         love.graphics.rectangle("fill", b.x, b.y, player.bw, player.bh)
     end
-
 end
 
 function d(s)
