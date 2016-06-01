@@ -1,12 +1,14 @@
 DEBUG = true
 
+world = {}
+
 player = {  x=0,y=580,w=100,h=20,s=8,
             bw=10,bh=10,bs=3,cooldown=15,
             bullets={} }
 
-enemy = {   x=0,y=0,w=50,h=50,s=4,
-            bw=10,bh=10,bs=2,cooldown=30,
-            bullets={} }
+enemy = {}
+
+world.enemies = {}
 
 function enemy:fire()
     if self.cooldown < 0 then
@@ -14,6 +16,14 @@ function enemy:fire()
         local bullet = {x=self.x+self.x/2,y=self.y+self.h/2}
         table.insert(self.bullets, bullet)
     end
+end
+
+function  world:spawnEnemy()
+     enemy = { x=0,y=0,w=50,h=50,s=4,
+                    bw=10,bh=10,bs=2,cooldown=30,
+                    bullets={} }
+    table.insert(self.enemies, enemy)
+    return enemy
 end
 
 function love.load()
@@ -37,6 +47,12 @@ function love.update(dt)
 
     if love.keyboard.isDown("space") then
         player.fire()
+    end
+
+    if love.keyboard.isDown("p") then
+        local enemy = world:spawnEnemy()
+        print(enemy)
+        enemy:fire()
     end
 
     for i,b in pairs(player.bullets) do
